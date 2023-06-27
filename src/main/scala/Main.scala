@@ -13,17 +13,15 @@ import java.nio.charset.StandardCharsets
 
 object Main extends ZIOAppDefault {
 
-  def readFile(filePath: String): String = {
-  val source = Source.fromFile(filePath)
-  val content = source.mkString
-  source.close()
-  content
-}
+  def readFile(filePath: String): List[List[Int]] = {
+  val source = Source.fromFile(filePath).getLines().map { line =>
+    line.split(" ").filter(_.nonEmpty).map(_.toInt).toList}.toList
+  source
 
+}
 
   def run: ZIO[Any, Throwable, Unit] =
     val gridFolderPath = "src/grid/"
-    //val fileContent = readFile(filePath)
     
     val result = for {
       _ <- Console.print("Enter the path to the txt file containing the Sudoku problem:")
@@ -33,4 +31,4 @@ object Main extends ZIOAppDefault {
       println(readFile(gridFolderPath + fileName + ".txt"))
      }
      result
-    }
+  }
