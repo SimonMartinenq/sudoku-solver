@@ -1,13 +1,13 @@
-package sudoku
-
 import zio._
 import zio.Console
 import ujson._
 import scala.io.Source
 
+
 object Main extends ZIOAppDefault {
 
   //My first Sudoku Grid
+
   // val problem = List(
   //   List(5, 3, 0, 0, 7, 0, 0, 0, 0),
   //   List(6, 0, 0, 1, 9, 5, 0, 0, 0),
@@ -103,9 +103,10 @@ object Main extends ZIOAppDefault {
     for {
       _ <- Console.print("Enter the path to the JSON file containing the Sudoku problem:")
       path <- Console.readLine
-      _ <-  Console.printLine(s"You entered: $path")
+      _ <- Console.printLine(s"You entered: $path")
       // Add your Sudoku solver logic here, utilizing ZIO and interacting with the ZIO Console
       _ <- ZIO.succeed {
+
         val problem = readJsonFile(path)
         val solution = solveSudokuTailRec(problem)
         solution match {
