@@ -3,7 +3,6 @@ import zio.Console
 import ujson._
 import scala.io.Source
 
-
 object Main extends ZIOAppDefault {
 
   //My first Sudoku Grid
