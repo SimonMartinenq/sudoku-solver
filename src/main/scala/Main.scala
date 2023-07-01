@@ -1,20 +1,24 @@
 import zio._
 import zio.Console
+import ujson._
+import scala.io.Source
+
 
 object Main extends ZIOAppDefault {
 
   //My first Sudoku Grid
-  val problem = List(
-    List(5, 3, 0, 0, 7, 0, 0, 0, 0),
-    List(6, 0, 0, 1, 9, 5, 0, 0, 0),
-    List(0, 9, 8, 0, 0, 0, 0, 6, 0),
-    List(8, 0, 0, 0, 6, 0, 0, 0, 3),
-    List(4, 0, 0, 8, 0, 3, 0, 0, 1),
-    List(7, 0, 0, 0, 2, 0, 0, 0, 6),
-    List(0, 6, 0, 0, 0, 0, 2, 8, 0),
-    List(0, 0, 0, 4, 1, 9, 0, 0, 5),
-    List(0, 0, 0, 0, 8, 0, 0, 7, 9)
-  )
+
+  // val problem = List(
+  //   List(5, 3, 0, 0, 7, 0, 0, 0, 0),
+  //   List(6, 0, 0, 1, 9, 5, 0, 0, 0),
+  //   List(0, 9, 8, 0, 0, 0, 0, 6, 0),
+  //   List(8, 0, 0, 0, 6, 0, 0, 0, 3),
+  //   List(4, 0, 0, 8, 0, 3, 0, 0, 1),
+  //   List(7, 0, 0, 0, 2, 0, 0, 0, 6),
+  //   List(0, 6, 0, 0, 0, 0, 2, 8, 0),
+  //   List(0, 0, 0, 4, 1, 9, 0, 0, 5),
+  //   List(0, 0, 0, 0, 8, 0, 0, 7, 9)
+  // )
 
   //Function to solve the Sudoku
   def solveSudokuTailRec(problem: List[List[Int]]): Option[List[List[Int]]] = {
@@ -69,12 +73,30 @@ object Main extends ZIOAppDefault {
 
   // Function to print the Sudoku Grid
   def printGrid(grid: List[List[Int]]): Unit = {
-    for (row <- grid) {
-      for (cell <- row) {
-        print(cell + "  ")
+    for (row <- grid.indices) {
+      if (row % 3 == 0) {
+        println("+-------+-------+-------+")
       }
-      println()
+      for (col <- grid(row).indices) {
+        if (col % 3 == 0) {
+          print("| ")
+        }
+        val cell = grid(row)(col)
+        if (cell == 0) {
+          print("  ")
+        } else {
+          print(cell + " ")
+        }
+      }
+      println("|")
     }
+    println("+-------+-------+-------+")
+  }
+  //json to List(List(Int))
+  def readJsonFile(path: String): List[List[Int]] = {
+    val jsonString = Source.fromFile(path).mkString
+    val data = ujson.read(jsonString)
+    data.arr.toList.map(_.arr.toList.map(_.num.toInt))
   }
 
   def run: ZIO[Any, Throwable, Unit] =
@@ -84,10 +106,13 @@ object Main extends ZIOAppDefault {
       _ <- Console.printLine(s"You entered: $path")
       // Add your Sudoku solver logic here, utilizing ZIO and interacting with the ZIO Console
       _ <- ZIO.succeed {
-        val solution = solveSudokuTailRec(problem)
 
+        val problem = readJsonFile(path)
+        val solution = solveSudokuTailRec(problem)
         solution match {
           case Some(grid) =>
+            println("Problem:")
+            printGrid(problem)
             println("Solution:")
             printGrid(grid)
           case None =>
