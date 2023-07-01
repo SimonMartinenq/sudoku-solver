@@ -99,21 +99,32 @@ object Main extends ZIOAppDefault {
   }
   // json to List(List(Int))
   def readJsonFile(path: String): List[List[Int]] = {
-    val jsonString = Source.fromFile(path).mkString
-    val data = ujson.read(jsonString)
-    data.arr.toList.map(_.arr.toList.map(_.num.toInt))
+    try {
+      val jsonString = Source.fromFile(path).mkString
+      val data = ujson.read(jsonString)
+      data.arr.toList.map(_.arr.toList.map(_.num.toInt))
+    } catch {
+      case e: IOException =>
+        println(s"Erreur lors de la lecture du fichier: ${e.getMessage}")
+        List.empty
+    }
   }
 
   def readFile(filePath: String): List[List[Int]] = {
-    val source = Source
-      .fromFile(filePath)
-      .getLines()
-      .map { line =>
-        line.split("").filter(_.nonEmpty).map(_.toInt).toList
-      }
-      .toList
-    source
-
+    try {
+      val source = Source
+        .fromFile(filePath)
+        .getLines()
+        .map { line =>
+          line.split("").filter(_.nonEmpty).map(_.toInt).toList
+        }
+        .toList
+      source
+    } catch {
+      case e: IOException =>
+        println(s"Erreur lors de la lecture du fichier: ${e.getMessage}")
+        List.empty
+    }
   }
 
   def run: ZIO[Any, Throwable, Unit] =
