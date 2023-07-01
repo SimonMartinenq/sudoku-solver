@@ -12,7 +12,10 @@ lazy val root = project
     libraryDependencies ++= Seq(
       "dev.zio" %% "zio" % zioVersion,
       "dev.zio" %% "zio-streams" % "2.0.15"
+      // Add other libraries like zio-nio and zip-json here if needed
+      "com.lihaoyi" %% "ujson" % "1.4.2"
     ).map(_ % Compile),
+    
     libraryDependencies ++= Seq(
       "org.scalameta" %% "munit" % "0.7.29"
     ).map(_ % Test)
