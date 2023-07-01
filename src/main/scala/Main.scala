@@ -73,12 +73,24 @@ object Main extends ZIOAppDefault {
 
   // Function to print the Sudoku Grid
   def printGrid(grid: List[List[Int]]): Unit = {
-    for (row <- grid) {
-      for (cell <- row) {
-        print(cell + "  ")
+    for (row <- grid.indices) {
+      if (row % 3 == 0) {
+        println("+-------+-------+-------+")
       }
-      println()
+      for (col <- grid(row).indices) {
+        if (col % 3 == 0) {
+          print("| ")
+        }
+        val cell = grid(row)(col)
+        if (cell == 0) {
+          print("  ")
+        } else {
+          print(cell + " ")
+        }
+      }
+      println("|")
     }
+    println("+-------+-------+-------+")
   }
   //json to List(List(Int))
   def readJsonFile(path: String): List[List[Int]] = {
