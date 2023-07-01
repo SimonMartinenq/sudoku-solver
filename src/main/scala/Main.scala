@@ -2,9 +2,6 @@ package sudoku
 
 import zio._
 import zio.Console._
-import zio.nio.file.Files
-import zio.nio.core.file.Path
-import zio.connect.file._
 import zio.stream._
 import scala.io.Source
 
@@ -24,7 +21,7 @@ object Main extends ZIOAppDefault {
     val gridFolderPath = "src/grid/"
     
     val result = for {
-      _ <- Console.print("Enter the path to the txt file containing the Sudoku problem:")
+      _ <- Console.print("Enter the name to the txt file containing the Sudoku problem:")
       fileName <- Console.readLine
       _ <-  Console.printLine(s"You entered: $fileName")
      } yield {
