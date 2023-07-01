@@ -1,5 +1,4 @@
 import zio._
-import zio.Console._
 import zio.stream._
 import scala.io.Source
 
@@ -11,7 +10,7 @@ import ujson._
 
 object Main extends ZIOAppDefault {
 
-  //My first Sudoku Grid
+  // My first Sudoku Grid
 
   // val problem = List(
   //   List(5, 3, 0, 0, 7, 0, 0, 0, 0),
@@ -25,19 +24,28 @@ object Main extends ZIOAppDefault {
   //   List(0, 0, 0, 0, 8, 0, 0, 7, 9)
   // )
 
-  //Function to solve the Sudoku
+  // Function to solve the Sudoku
   def solveSudokuTailRec(problem: List[List[Int]]): Option[List[List[Int]]] = {
     val size = 9
 
-    def solveSudokuHelper(row: Int, col: Int, grid: List[List[Int]]): Option[List[List[Int]]] = {
+    def solveSudokuHelper(
+        row: Int,
+        col: Int,
+        grid: List[List[Int]]
+    ): Option[List[List[Int]]] = {
       if (row == size)
         Some(grid) // Sudoku is resolved
       else if (col == size)
         solveSudokuHelper(row + 1, 0, grid) // Go to the next line
       else if (grid(row)(col) != 0)
-        solveSudokuHelper(row, col + 1, grid) // Go to the next column if case already set
+        solveSudokuHelper(
+          row,
+          col + 1,
+          grid
+        ) // Go to the next column if case already set
       else {
-        val usedValues = (1 to size).filter(value => isValidNumber(grid, value, row, col))
+        val usedValues =
+          (1 to size).filter(value => isValidNumber(grid, value, row, col))
 
         def loop(values: List[Int]): Option[List[List[Int]]] = values match {
           case Nil => None // No value is possible
@@ -57,7 +65,12 @@ object Main extends ZIOAppDefault {
     solveSudokuHelper(0, 0, problem)
   }
 
-  def isValidNumber(grid: List[List[Int]], number: Int, row: Int, col: Int): Boolean = {
+  def isValidNumber(
+      grid: List[List[Int]],
+      number: Int,
+      row: Int,
+      col: Int
+  ): Boolean = {
     val size = 9
 
     // Check the line
@@ -69,9 +82,10 @@ object Main extends ZIOAppDefault {
     // Check the 3x3 subgrid
     val subgridRow = row - row % 3
     val subgridCol = col - col % 3
-    val subgridHasNumber = grid.slice(subgridRow, subgridRow + 3).exists { row =>
-      row.slice(subgridCol, subgridCol + 3).contains(number)
-    }
+    val subgridHasNumber =
+      grid.slice(subgridRow, subgridRow + 3).exists { row =>
+        row.slice(subgridCol, subgridCol + 3).contains(number)
+      }
 
     !rowHasNumber && !colHasNumber && !subgridHasNumber
   }
@@ -97,28 +111,34 @@ object Main extends ZIOAppDefault {
     }
     println("+-------+-------+-------+")
   }
-  //json to List(List(Int))
+  // json to List(List(Int))
   def readJsonFile(path: String): List[List[Int]] = {
     val jsonString = Source.fromFile(path).mkString
     val data = ujson.read(jsonString)
     data.arr.toList.map(_.arr.toList.map(_.num.toInt))
   }
-  
-  def readFile(filePath: String): List[List[Int]] = {
-  val source = Source.fromFile(filePath).getLines().map { line =>
-    line.split(" ").filter(_.nonEmpty).map(_.toInt).toList}.toList
-  source
 
-}
+  def readFile(filePath: String): List[List[Int]] = {
+    val source = Source
+      .fromFile(filePath)
+      .getLines()
+      .map { line =>
+        line.split(" ").filter(_.nonEmpty).map(_.toInt).toList
+      }
+      .toList
+    source
+
+  }
 
   def run: ZIO[Any, Throwable, Unit] =
     for {
-      _ <- Console.print("Enter the path to the JSON file containing the Sudoku problem:")
+      _ <- Console.print(
+        "Enter the path to the JSON file containing the Sudoku problem:"
+      )
       path <- Console.readLine
       _ <- Console.printLine(s"You entered: $path")
       // Add your Sudoku solver logic here, utilizing ZIO and interacting with the ZIO Console
       _ <- ZIO.succeed {
-
         val problem = readJsonFile(path)
         val solution = solveSudokuTailRec(problem)
         solution match {
