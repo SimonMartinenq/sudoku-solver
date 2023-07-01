@@ -1,7 +1,13 @@
 import zio._
+import zio.Console._
+import zio.stream._
+import scala.io.Source
+
+import java.io.{ByteArrayInputStream, IOException}
+import java.nio.charset.StandardCharsets
+
 import zio.Console
 import ujson._
-import scala.io.Source
 
 object Main extends ZIOAppDefault {
 
@@ -97,6 +103,13 @@ object Main extends ZIOAppDefault {
     val data = ujson.read(jsonString)
     data.arr.toList.map(_.arr.toList.map(_.num.toInt))
   }
+  
+  def readFile(filePath: String): List[List[Int]] = {
+  val source = Source.fromFile(filePath).getLines().map { line =>
+    line.split(" ").filter(_.nonEmpty).map(_.toInt).toList}.toList
+  source
+
+}
 
   def run: ZIO[Any, Throwable, Unit] =
     for {
