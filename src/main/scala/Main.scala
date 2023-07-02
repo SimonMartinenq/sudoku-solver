@@ -28,11 +28,7 @@ object Main extends ZIOAppDefault {
   def solveSudokuTailRec(problem: List[List[Int]]): Option[List[List[Int]]] = {
     val size = 9
 
-    def solveSudokuHelper(
-        row: Int,
-        col: Int,
-        grid: List[List[Int]]
-    ): Option[List[List[Int]]] = {
+    def solveSudokuHelper( row: Int, col: Int, grid: List[List[Int]]): Option[List[List[Int]]] = {
       if (row == size)
         Some(grid) // Sudoku is resolved
       else if (col == size)
@@ -61,8 +57,11 @@ object Main extends ZIOAppDefault {
         loop(usedValues.toList)
       }
     }
-
-    solveSudokuHelper(0, 0, problem)
+    if (problem.forall(_.forall(_ == 0))) {
+        Some(List())
+    } else {
+        solveSudokuHelper(0, 0, problem)
+    }
   }
 
   def isValidNumber(
