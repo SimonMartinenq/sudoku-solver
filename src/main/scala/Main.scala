@@ -17,7 +17,7 @@ object Main extends ZIOAppDefault {
   def solveSudokuTailRec(problem: List[List[Int]]): Option[List[List[Int]]] = {
     val size = 9
 
-    // Fonction auxiliaire utilisée par solveSudokuTailRec. 
+    //Fonction auxiliaire utilisée par solveSudokuTailRec. 
     //Elle prend les coordonnées d'une case dans la grille (ligne et colonne) ainsi que la grille elle-même.
     //Elle utilise la récursion pour explorer toutes les possibilités de valeurs à placer dans la case courante.
     def solveSudokuHelper( row: Int, col: Int, grid: List[List[Int]]): Option[List[List[Int]]] = {
@@ -26,16 +26,12 @@ object Main extends ZIOAppDefault {
       else if (col == size)
         solveSudokuHelper(row + 1, 0, grid) // Go to the next line
       else if (grid(row)(col) != 0)
-        solveSudokuHelper(
-          row,
-          col + 1,
-          grid
-        ) // Go to the next column if case already set
+        solveSudokuHelper(row, col + 1, grid ) // Go to the next column if case already set
       else {
         val usedValues =
           (1 to size).filter(value => isValidNumber(grid, value, row, col))
 
-        // Fonction auxiliaire récursive utilisée pour itérer sur les valeurs possibles à placer dans la case courante. 
+        //Fonction auxiliaire récursive utilisée pour itérer sur les valeurs possibles à placer dans la case courante. 
         //Elle explore récursivement les différentes valeurs jusqu'à ce qu'une solution soit trouvée ou qu'aucune solution ne soit possible.
         def loop(values: List[Int]): Option[List[List[Int]]] = values match {
           case Nil => None // No value is possible
@@ -51,8 +47,9 @@ object Main extends ZIOAppDefault {
         loop(usedValues.toList)
       }
     }
-    if (problem.forall(_.forall(_ == 0))) {
-        Some(List())
+    //A Sudoku Grid must have at least 17 values to be solve
+    if (problem.flatMap(_.filter(_ != 0)).count(_ => true) < 17) {
+        None
     } else {
         solveSudokuHelper(0, 0, problem)
     }
@@ -143,7 +140,7 @@ object Main extends ZIOAppDefault {
     }
   }
 
-  //utilise ZIO pour interagir avec la console et effectuer les opérations d'entrée/sortie. 
+  //Utilise ZIO pour interagir avec la console et effectuer les opérations d'entrée/sortie. 
   //Elle demande à l'utilisateur de choisir le type de fichier (txt ou json) et le chemin du fichier contenant le problème de Sudoku. 
   //Ensuite, elle lit le fichier approprié en utilisant les fonctions readFile ou readJsonFile, 
   //résout le Sudoku en utilisant solveSudokuTailRec, et affiche la grille de problème et la grille de solution en utilisant les fonctions printGrid.
