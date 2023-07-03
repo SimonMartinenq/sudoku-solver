@@ -10,20 +10,6 @@ import ujson._
 
 object Main extends ZIOAppDefault {
 
-  // My first Sudoku Grid
-
-  // val problem = List(
-  //   List(5, 3, 0, 0, 7, 0, 0, 0, 0),
-  //   List(6, 0, 0, 1, 9, 5, 0, 0, 0),
-  //   List(0, 9, 8, 0, 0, 0, 0, 6, 0),
-  //   List(8, 0, 0, 0, 6, 0, 0, 0, 3),
-  //   List(4, 0, 0, 8, 0, 3, 0, 0, 1),
-  //   List(7, 0, 0, 0, 2, 0, 0, 0, 6),
-  //   List(0, 6, 0, 0, 0, 0, 2, 8, 0),
-  //   List(0, 0, 0, 4, 1, 9, 0, 0, 5),
-  //   List(0, 0, 0, 0, 8, 0, 0, 7, 9)
-  // )
-
   // Function to solve the Sudoku
   def solveSudokuTailRec(problem: List[List[Int]]): Option[List[List[Int]]] = {
     val size = 9
@@ -112,37 +98,60 @@ object Main extends ZIOAppDefault {
   }
   // json to List(List(Int))
   def readJsonFile(path: String): List[List[Int]] = {
-    val jsonString = Source.fromFile(path).mkString
-    val data = ujson.read(jsonString)
-    data.arr.toList.map(_.arr.toList.map(_.num.toInt))
+    try {
+      val jsonString = Source.fromFile(path).mkString
+      val data = ujson.read(jsonString)
+      data.arr.toList.map(_.arr.toList.map(_.num.toInt))
+    } catch {
+      case e: IOException =>
+        println(s"Erreur lors de la lecture du fichier: ${e.getMessage}")
+        List.empty
+    }
   }
 
   def readFile(filePath: String): List[List[Int]] = {
-    val source = Source
-      .fromFile(filePath)
-      .getLines()
-      .map { line =>
-        line.split(" ").filter(_.nonEmpty).map(_.toInt).toList
-      }
-      .toList
-    source
-
+    try {
+      val source = Source
+        .fromFile(filePath)
+        .getLines()
+        .map { line =>
+          line.split("").filter(_.nonEmpty).map(_.toInt).toList
+        }
+        .toList
+      source
+    } catch {
+      case e: IOException =>
+        println(s"Erreur lors de la lecture du fichier: ${e.getMessage}")
+        List.empty
+    }
   }
 
   def run: ZIO[Any, Throwable, Unit] =
     for {
-      _ <- Console.print(
-        "Enter the path to the JSON file containing the Sudoku problem:"
+      _ <- Console.printLine(
+        "Veuillez choisir le type de fichier à utiliser (txt ou json):"
+      )
+      fileType <- Console.readLine
+      _ <- Console.printLine(s"Vous avez choisi: $fileType")
+      _ <- Console.printLine(
+        "Entrez le chemin du fichier contenant le problème de Sudoku:"
       )
       path <- Console.readLine
-      _ <- Console.printLine(s"You entered: $path")
+      _ <- Console.printLine(s"Vous avez entré: $path")
       // Add your Sudoku solver logic here, utilizing ZIO and interacting with the ZIO Console
       _ <- ZIO.succeed {
-        val problem = readJsonFile(path)
+        val problem = fileType match {
+          case "txt"  => readFile(path)
+          case "json" => readJsonFile(path)
+          case _ =>
+            throw new IllegalArgumentException(
+              "Le type de fichier doit être txt ou json"
+            )
+        }
         val solution = solveSudokuTailRec(problem)
         solution match {
           case Some(grid) =>
-            println("Problem:")
+            println("Problème:")
             printGrid(problem)
             println("Solution:")
             printGrid(grid)
@@ -151,4 +160,5 @@ object Main extends ZIOAppDefault {
         }
       }
     } yield ()
+
 }
