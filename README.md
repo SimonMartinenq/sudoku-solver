@@ -7,10 +7,10 @@ Ce programme est un résolveur de Sudoku écrit en Scala utilisant ZIO. Il est c
 
 Avant de commencer, assurez-vous d'avoir les éléments suivants installés sur votre système :
 
-    [Scala](https://docs.scala-lang.org/fr/tour/tour-of-scala.html) (version 2.13.0 ou supérieure)
-    [sbt](https://www.scala-sbt.org/) (version 1.5.0 ou supérieure)
-    [VS Code]https://code.visualstudio.com
-    [Metals](https://scalameta.org/metals/docs/editors/vscode/) (extension VS Code)
+    [Scala (version 2.13.0 ou supérieure)](https://docs.scala-lang.org/fr/tour/tour-of-scala.html) 
+    [sbt (version 1.5.0 ou supérieure)](https://www.scala-sbt.org/) 
+    [VS Code](https://code.visualstudio.com)
+    [Metals (extension VS Code)](https://scalameta.org/metals/docs/editors/vscode/) 
 
 ### Configuration de Metals dans VS Code
 
