@@ -1,52 +1,52 @@
-# Résolveur de Sudoku
+# Sudoku Solver
 
-Ce programme est un résolveur de Sudoku écrit en Scala utilisant ZIO. Il est capable de résoudre des grilles de Sudoku fournies sous forme de fichiers texte ou de fichiers JSON.
+This program is a Sudoku solver written in Scala using ZIO. It is able to solve Sudoku puzzles provided as text files or JSON files.
 
-## Configuration de l'environnement de développement
-### Prérequis
+## Setting up the development environment
+### Prerequisites
 
-Avant de commencer, assurez-vous d'avoir les éléments suivants installés sur votre système :
+Before you begin, make sure you have the following installed on your system:
 
     [Scala (version 2.13.0 ou supérieure)](https://docs.scala-lang.org/fr/tour/tour-of-scala.html) 
     [sbt (version 1.5.0 ou supérieure)](https://www.scala-sbt.org/) 
     [VS Code](https://code.visualstudio.com)
     [Metals (extension VS Code)](https://scalameta.org/metals/docs/editors/vscode/) 
 
-### Configuration de Metals dans VS Code
+### Configuring Metals in VS Code
 
-    Ouvrez VS Code et installez l'extension "Metals" à partir du marché des extensions.
-    Une fois l'extension installée, redémarrez VS Code.
-    Ouvrez le dossier contenant le code source du programme Sudoku.
-    Lorsque vous ouvrez le dossier, Metals détecte automatiquement qu'il s'agit d'un projet Scala et effectue les étapes de configuration nécessaires.
-    Attendez que Metals termine le processus d'indexation du projet et la résolution des dépendances.
+    Open VS Code and install the "Metals" extension from the Extensions Market.
+    Once the extension is installed, restart VS Code.
+    Open the folder containing the Sudoku program source code.
+    When you open the folder, Metals automatically detects that it is a Scala project and performs the necessary configuration steps.
+    Wait for Metals to complete the process of indexing the project and resolving dependencies.
 
-Vous devriez maintenant pouvoir utiliser toutes les fonctionnalités de Metals pour développer le programme Sudoku, y compris l'autocomplétion, la navigation dans le code et le débogage.
+You should now be able to use all the features of Metals to develop the Sudoku program, including autocompletion, code navigation, and debugging.
 
 ## Exécution du programme
 
 Pour exécuter le programme, suivez les étapes suivantes :
 
 1. Option 1
-- Ouvrez un terminal dans VS Code en utilisant la combinaison de touches Ctrl+` (ou en allant dans le menu "Terminal" > "Nouveau terminal").
-- Dans le terminal, exécutez la commande suivante pour compiler le programme :
+- Open a terminal in VS Code using the Ctrl+` key combination (or by going to the "Terminal" > "New Terminal" menu).
+- In the terminal, run the following command to compile the program:
   ```bash
     sbt compile
   ```
-- Une fois la compilation terminée, exécutez la commande suivante pour exécuter le programme :
+- Once the compilation is complete, run the following command to run the program :
   ```bash
     sbt run
   ```
 1. Option 2
 
-2. Appuyer sur run au niveau de la déclaration du Main
+2. Press run at the Main declaration
 
-3. Le programme vous demandera de choisir le type de fichier à utiliser (txt ou json) et de spécifier le chemin du fichier contenant le problème de Sudoku.
+3. The program will ask you to choose the type of file to use (txt or json) and specify the path to the file containing the Sudoku problem.
 
-4. Suivez les instructions à l'écran et le programme résoudra le Sudoku en affichant la grille de problème et la grille de solution.
+4. Follow the on-screen instructions and the program will solve the Sudoku by displaying the problem grid and the solution grid.
 
-N'oubliez pas de remplacer mon_chemin_de_fichier par le chemin réel du fichier contenant le problème de Sudoku que vous souhaitez résoudre.
+Remember to replace my_file_path with the actual path of the file containing the Sudoku problem you want to solve.
 
 ## Contribution
 
-Les contributions sont les bienvenues ! Si vous souhaitez apporter des améliorations à ce programme Sudoku, n'hésitez pas à créer une demande d'extraction avec vos modifications.
+Contributions are welcome! If you want to make improvements to this Sudoku program, feel free to create a pull request with your changes.
 Licence
