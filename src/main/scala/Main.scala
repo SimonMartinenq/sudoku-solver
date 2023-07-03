@@ -8,12 +8,18 @@ import java.nio.charset.StandardCharsets
 import zio.Console
 import ujson._
 
+//Utilise le modèle par défaut fourni par ZIO pour exécuter l'application.
 object Main extends ZIOAppDefault {
 
   // Function to solve the Sudoku
+  //Fonction qui prend une grille de Sudoku (une liste de listes d'entiers) et renvoie une option de grille de Sudoku. 
+  // Elle utilise une approche récursive pour résoudre le Sudoku.
   def solveSudokuTailRec(problem: List[List[Int]]): Option[List[List[Int]]] = {
     val size = 9
 
+    // Fonction auxiliaire utilisée par solveSudokuTailRec. 
+    //Elle prend les coordonnées d'une case dans la grille (ligne et colonne) ainsi que la grille elle-même.
+    //Elle utilise la récursion pour explorer toutes les possibilités de valeurs à placer dans la case courante.
     def solveSudokuHelper( row: Int, col: Int, grid: List[List[Int]]): Option[List[List[Int]]] = {
       if (row == size)
         Some(grid) // Sudoku is resolved
@@ -29,6 +35,8 @@ object Main extends ZIOAppDefault {
         val usedValues =
           (1 to size).filter(value => isValidNumber(grid, value, row, col))
 
+        // Fonction auxiliaire récursive utilisée pour itérer sur les valeurs possibles à placer dans la case courante. 
+        //Elle explore récursivement les différentes valeurs jusqu'à ce qu'une solution soit trouvée ou qu'aucune solution ne soit possible.
         def loop(values: List[Int]): Option[List[List[Int]]] = values match {
           case Nil => None // No value is possible
           case value :: tail =>
@@ -50,6 +58,8 @@ object Main extends ZIOAppDefault {
     }
   }
 
+  //Fonction qui vérifie si un nombre donné peut être placé dans une case spécifique de la grille sans violer les règles du Sudoku. 
+  //Elle vérifie si le nombre n'apparaît pas déjà dans la ligne, la colonne et le sous-groupe 3x3 correspondant.
   def isValidNumber(
       grid: List[List[Int]],
       number: Int,
@@ -75,7 +85,8 @@ object Main extends ZIOAppDefault {
     !rowHasNumber && !colHasNumber && !subgridHasNumber
   }
 
-  // Function to print the Sudoku Grid
+  // Fonction qui imprime la grille de Sudoku sur la console. 
+  // Elle itère sur chaque ligne et colonne de la grille et affiche les cellules vides comme des espaces et les cellules remplies avec leurs valeurs.
   def printGrid(grid: List[List[Int]]): Unit = {
     for (row <- grid.indices) {
       if (row % 3 == 0) {
@@ -96,7 +107,10 @@ object Main extends ZIOAppDefault {
     }
     println("+-------+-------+-------+")
   }
-  // json to List(List(Int))
+
+  // Fonction qui lit un fichier JSON à partir d'un chemin de fichier donné. 
+  // Elle utilise la bibliothèque Scala Source pour lire le contenu du fichier et la bibliothèque ujson pour analyser la chaîne JSON en une structure de données. 
+  // La fonction renvoie une liste de listes d'entiers représentant la grille de Sudoku extraite du fichier.
   def readJsonFile(path: String): List[List[Int]] = {
     try {
       val jsonString = Source.fromFile(path).mkString
@@ -109,7 +123,10 @@ object Main extends ZIOAppDefault {
     }
   }
 
-  def readFile(filePath: String): List[List[Int]] = {
+  // Lit un fichier texte contenant une grille de Sudoku. 
+  // Elle utilise la bibliothèque Scala Source pour lire le contenu du fichier, puis divise chaque ligne en caractères individuels, filtre les caractères vides et les convertit en entiers. 
+  // La fonction renvoie une liste de listes d'entiers représentant la grille de Sudoku extraite du fichier.
+  def readTxtFile(filePath: String): List[List[Int]] = {
     try {
       val source = Source
         .fromFile(filePath)
@@ -126,6 +143,10 @@ object Main extends ZIOAppDefault {
     }
   }
 
+  //utilise ZIO pour interagir avec la console et effectuer les opérations d'entrée/sortie. 
+  //Elle demande à l'utilisateur de choisir le type de fichier (txt ou json) et le chemin du fichier contenant le problème de Sudoku. 
+  //Ensuite, elle lit le fichier approprié en utilisant les fonctions readFile ou readJsonFile, 
+  //résout le Sudoku en utilisant solveSudokuTailRec, et affiche la grille de problème et la grille de solution en utilisant les fonctions printGrid.
   def run: ZIO[Any, Throwable, Unit] =
     for {
       _ <- Console.printLine(
@@ -141,7 +162,7 @@ object Main extends ZIOAppDefault {
       // Add your Sudoku solver logic here, utilizing ZIO and interacting with the ZIO Console
       _ <- ZIO.succeed {
         val problem = fileType match {
-          case "txt"  => readFile(path)
+          case "txt"  => readTxtFile(path)
           case "json" => readJsonFile(path)
           case _ =>
             throw new IllegalArgumentException(
