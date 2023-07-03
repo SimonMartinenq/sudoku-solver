@@ -26,25 +26,23 @@ Vous devriez maintenant pouvoir utiliser toutes les fonctionnalités de Metals p
 
 Pour exécuter le programme, suivez les étapes suivantes :
 
-### Option 1
-1. Ouvrez un terminal dans VS Code en utilisant la combinaison de touches Ctrl+` (ou en allant dans le menu "Terminal" > "Nouveau terminal").
-
-2. Dans le terminal, exécutez la commande suivante pour compiler le programme :
-  `bash
+1. Option 1
+- Ouvrez un terminal dans VS Code en utilisant la combinaison de touches Ctrl+` (ou en allant dans le menu "Terminal" > "Nouveau terminal").
+- Dans le terminal, exécutez la commande suivante pour compiler le programme :
+  ```bash
     sbt compile
-  `
-
-3. Une fois la compilation terminée, exécutez la commande suivante pour exécuter le programme :
-  `bash
+  ```
+- Une fois la compilation terminée, exécutez la commande suivante pour exécuter le programme :
+  ```bash
     sbt run
-  `
-### Option 2
+  ```
+1. Option 2
 
-1. Appuyer sur run au niveau de la déclaration du Main
+2. Appuyer sur run au niveau de la déclaration du Main
 
-4. Le programme vous demandera de choisir le type de fichier à utiliser (txt ou json) et de spécifier le chemin du fichier contenant le problème de Sudoku.
+3. Le programme vous demandera de choisir le type de fichier à utiliser (txt ou json) et de spécifier le chemin du fichier contenant le problème de Sudoku.
 
-5. Suivez les instructions à l'écran et le programme résoudra le Sudoku en affichant la grille de problème et la grille de solution.
+4. Suivez les instructions à l'écran et le programme résoudra le Sudoku en affichant la grille de problème et la grille de solution.
 
 N'oubliez pas de remplacer mon_chemin_de_fichier par le chemin réel du fichier contenant le problème de Sudoku que vous souhaitez résoudre.
 
